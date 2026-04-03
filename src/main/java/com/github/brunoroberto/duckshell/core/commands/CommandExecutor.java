@@ -1,7 +1,9 @@
 package com.github.brunoroberto.duckshell.core.commands;
 
-public interface CommandExecutor {
+import com.github.brunoroberto.duckshell.core.ShellContext;
 
-    public CommandResult execute(ShellCmd command);
+public interface CommandExecutor<T extends Command> {
+
+    CommandResult execute(ShellContext shellContext, T command);
 
 }

@@ -2,18 +2,25 @@ package com.github.brunoroberto.duckshell.core.commands;
 
 import com.github.brunoroberto.duckshell.core.ShellContext;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
-import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionNode;
 
-import java.util.List;
 import java.util.Objects;
 
-public class EchoCmd implements ShellCmd {
+public class EchoCmd implements ShellCommand {
+
+    private final CommandNode commandNode;
+
+    public EchoCmd(CommandNode commandNode) {
+        this.commandNode = Objects.requireNonNull(commandNode, "commandNode must not be null");
+    }
 
     @Override
-    public void execute(ShellContext shellContext, List<String> params, List<RedirectionNode> redirections) {
+    public CommandResult execute(ShellContext shellContext) {
         Objects.requireNonNull(shellContext, "shell context must not be null");
-        Objects.requireNonNull(params, "params must not be null");
-        Objects.requireNonNull(redirections, "redirections must not be null");
-
+        var params = this.commandNode.arguments();
+        if (params != null && !params.isEmpty()) {
+            var content = String.join(" ", params);
+            return new CommandResult(content, true, true, commandNode.redirections());
+        }
+        return new CommandResult(null, false, true, commandNode.redirections());
     }
 }

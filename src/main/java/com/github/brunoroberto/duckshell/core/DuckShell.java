@@ -2,6 +2,7 @@ package com.github.brunoroberto.duckshell.core;
 
 import com.github.brunoroberto.duckshell.core.commands.CommandExecutorFactory;
 import com.github.brunoroberto.duckshell.core.commands.CommandResolver;
+import com.github.brunoroberto.duckshell.core.commands.CommandResult;
 import com.github.brunoroberto.duckshell.core.parser.ShellParser;
 
 public class DuckShell implements Shell {
@@ -27,8 +28,8 @@ public class DuckShell implements Shell {
             var rawInput = prompt();
             var command = commandResolver.resolve(this.shellParser.parse(rawInput));
             var executor = CommandExecutorFactory.create(command);
-//            var result = executor.execute(command);
-            printOutput("result");
+            var result = executor.execute(shellContext, command);
+            printOutput(result);
         }
     }
 
@@ -37,7 +38,9 @@ public class DuckShell implements Shell {
         return IO.readln(prompt);
     }
 
-    private void printOutput(String output) {
-        IO.println(output);
+    private void printOutput(CommandResult result) {
+        if (result.shouldPrint()) {
+            IO.println(result.output());
+        }
     }
 }

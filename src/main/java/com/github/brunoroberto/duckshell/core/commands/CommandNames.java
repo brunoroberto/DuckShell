@@ -1,13 +1,14 @@
 package com.github.brunoroberto.duckshell.core.commands;
 
-public enum CmdNames {
+public enum CommandNames {
 
     ECHO("echo"),
+    EXIT("exit"),
     INVALID_CMD("invalid_cmd");
 
     private final String name;
 
-    CmdNames(String name) {
+    CommandNames(String name) {
         this.name = name;
     }
 
@@ -15,8 +16,8 @@ public enum CmdNames {
         return name;
     }
 
-    public static CmdNames of(String name) {
-        for (CmdNames cmdNames : values()) {
+    public static CommandNames of(String name) {
+        for (CommandNames cmdNames : values()) {
             if (cmdNames.getName().equals(name)) {
                 return cmdNames;
             }

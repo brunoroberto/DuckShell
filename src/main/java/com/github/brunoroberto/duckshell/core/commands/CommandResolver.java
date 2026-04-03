@@ -4,10 +4,11 @@ import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
 public class CommandResolver {
 
-    public ShellCmd resolve(CommandNode commandNode) {
-        var cmdName = CmdNames.of(commandNode.command());
+    public Command resolve(CommandNode commandNode) {
+        var cmdName = CommandNames.of(commandNode.command());
         return switch (cmdName) {
-            case CmdNames.ECHO -> new EchoCmd();
+            case CommandNames.ECHO -> new EchoCmd(commandNode);
+            case CommandNames.EXIT -> new ExitCmd();
             default -> null;
         };
     }
