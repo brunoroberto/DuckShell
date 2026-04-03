@@ -26,9 +26,9 @@ public class CdCmd implements ShellCommand{
         try {
             context.updateCurrentWorkingDirectory(targetDir);
         } catch (FileNotFoundException e) {
-            return new CommandResult("", e.getMessage(), true, false, commandNode.redirections());
+            return new CommandResult(null, e.getMessage(), true, false, commandNode.redirections());
         }
-        return new EmptyResult();
+        return new CommandResult(null, null, false, true, commandNode.redirections());
     }
 
     private String getTargetDir(List<String> arguments) {

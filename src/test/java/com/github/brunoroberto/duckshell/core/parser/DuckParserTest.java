@@ -84,8 +84,12 @@ class DuckParserTest {
     }
 
     @Test
-    void emptyInputThrows() {
-        assertThrows(IllegalArgumentException.class, () -> parser.parse(""));
+    void emptyReturnsEmptyCommand() {
+        var emptyCommandNode = parser.parse("");
+        assertNotNull(emptyCommandNode);
+        assertTrue(emptyCommandNode.command().isEmpty());
+        assertTrue(emptyCommandNode.arguments().isEmpty());
+        assertTrue(emptyCommandNode.redirections().isEmpty());
     }
 
     @Test

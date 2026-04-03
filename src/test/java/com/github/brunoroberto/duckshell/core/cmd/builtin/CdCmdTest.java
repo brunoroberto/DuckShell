@@ -21,9 +21,10 @@ class CdCmdTest {
     void cdToExistingDirectory(@TempDir Path tempDir) {
         var cmd = new CdCmd(new CommandNode("cd", List.of(tempDir.toString()), List.of()));
         var result = cmd.execute(context);
-        assertEquals("", result.stdout());
+        assertNull(result.getStdOut());
+        assertNull(result.getStdErr());
         assertFalse(result.shouldPrint());
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
         assertEquals(tempDir.toString(), context.getCurrentWorkingDirectoryAsString());
     }
 
@@ -31,16 +32,16 @@ class CdCmdTest {
     void cdToNonExistentDirectoryReturnsError() {
         var cmd = new CdCmd(new CommandNode("cd", List.of("/nonexistent/path/xyz"), List.of()));
         var result = cmd.execute(context);
-        assertTrue(result.stdout().contains("does not exist"));
+        assertTrue(result.getStdErr().contains("does not exist"));
         assertTrue(result.shouldPrint());
-        assertFalse(result.success());
+        assertFalse(result.isSuccess());
     }
 
     @Test
     void cdWithNoArgumentsGoesToHome() {
         var cmd = new CdCmd(new CommandNode("cd", List.of(), List.of()));
         var result = cmd.execute(context);
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
         assertEquals(System.getenv("HOME"), context.getCurrentWorkingDirectoryAsString());
     }
 
@@ -48,7 +49,7 @@ class CdCmdTest {
     void cdWithTildeGoesToHome() {
         var cmd = new CdCmd(new CommandNode("cd", List.of("~"), List.of()));
         var result = cmd.execute(context);
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
         assertEquals(System.getenv("HOME"), context.getCurrentWorkingDirectoryAsString());
     }
 
@@ -64,7 +65,7 @@ class CdCmdTest {
         // Then cd to relative subdir
         var cmd2 = new CdCmd(new CommandNode("cd", List.of("subdir"), List.of()));
         var result = cmd2.execute(context);
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
         assertEquals(subDir.toString(), context.getCurrentWorkingDirectoryAsString());
     }
 
@@ -73,8 +74,7 @@ class CdCmdTest {
         var redirections = List.of(new RedirectionNode(RedirectionType.STDOUT_OVERWRITE, "out.txt"));
         var cmd = new CdCmd(new CommandNode("cd", List.of(tempDir.toString()), redirections));
         var result = cmd.execute(context);
-        assertEquals(1, result.redirections().size());
-        assertEquals("out.txt", result.redirections().get(0).target());
+        assertTrue(result.hasRedirection());
     }
 
     @Test

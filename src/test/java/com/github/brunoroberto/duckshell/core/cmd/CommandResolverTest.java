@@ -1,8 +1,11 @@
 package com.github.brunoroberto.duckshell.core.cmd;
 
 import com.github.brunoroberto.duckshell.core.Context;
+import com.github.brunoroberto.duckshell.core.OSPath;
 import com.github.brunoroberto.duckshell.core.cmd.builtin.EchoCmd;
 import com.github.brunoroberto.duckshell.core.cmd.builtin.ExitCmd;
+import com.github.brunoroberto.duckshell.core.cmd.builtin.InvalidCmd;
+import com.github.brunoroberto.duckshell.core.io.ConsoleOutput;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +22,7 @@ class CommandResolverTest {
     @BeforeEach
     void setUp() {
         resolver = new CommandResolver();
-        context = null;
+        context = new Context(new ConsoleOutput(), new OSPath());
     }
 
     @Test
@@ -38,8 +41,8 @@ class CommandResolverTest {
 
     @Test
     void unknownCommandReturnsNull() {
-        var node = new CommandNode("ls", List.of(), List.of());
+        var node = new CommandNode("unknown-command", List.of(), List.of());
         var command = resolver.resolve(context, node);
-        assertNull(command);
+        assertInstanceOf(InvalidCmd.class, command);
     }
 }

@@ -2,6 +2,7 @@ package com.github.brunoroberto.duckshell.core;
 
 import com.github.brunoroberto.duckshell.core.cmd.CommandExecutorFactory;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResolver;
+import com.github.brunoroberto.duckshell.core.cmd.builtin.InvalidCmd;
 import com.github.brunoroberto.duckshell.core.parser.DuckParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,8 +80,8 @@ class IntegrationTest {
 
     @Test
     void unknownCommandResolvesToNull() {
-        var node = parser.parse("ls -la");
+        var node = parser.parse("unknown-command");
         var command = resolver.resolve(context, node);
-        assertNull(command);
+        assertInstanceOf(InvalidCmd.class, command);
     }
 }
