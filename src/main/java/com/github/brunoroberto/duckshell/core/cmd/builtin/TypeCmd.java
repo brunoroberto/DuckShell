@@ -68,6 +68,7 @@ public class TypeCmd implements ShellCommand{
 
     private CommandResult commandNotFoundResult(String targetCmd) {
         return new CommandResult(
+                "",
                 String.format(COMMAND_NOT_FOUND_ERROR, targetCmd),
                 true,
                 false,

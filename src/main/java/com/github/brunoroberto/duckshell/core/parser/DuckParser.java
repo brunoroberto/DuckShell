@@ -1,8 +1,10 @@
 package com.github.brunoroberto.duckshell.core.parser;
 
+import com.github.brunoroberto.duckshell.core.cmd.Command;
 import com.github.brunoroberto.duckshell.core.parser.tokens.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DuckParser implements ShellParser {
@@ -51,6 +53,9 @@ public class DuckParser implements ShellParser {
     }
 
     private CommandNode parseCommand() {
+        if (check(TokenType.EOF)) {
+            return new CommandNode("", Collections.emptyList(), Collections.emptyList());
+        }
         Token commandToken = consume(TokenType.WORD, "Expected command name");
         String commandName = commandToken.value();
         List<String> arguments = new ArrayList<>();

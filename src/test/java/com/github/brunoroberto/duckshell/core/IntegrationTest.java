@@ -24,11 +24,11 @@ class IntegrationTest {
     @Test
     void fullPipelineEchoSimple() {
         var node = parser.parse("echo hello");
-        var command = resolver.resolve(node);
+        var command = resolver.resolve(context, node);
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello", result.getResult());
+        assertEquals("hello", result.getStdOut());
         assertTrue(result.shouldPrint());
         assertTrue(result.isSuccess());
     }
@@ -36,31 +36,31 @@ class IntegrationTest {
     @Test
     void fullPipelineEchoMultipleArgs() {
         var node = parser.parse("echo hello beautiful world");
-        var command = resolver.resolve(node);
+        var command = resolver.resolve(context, node);
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello beautiful world", result.getResult());
+        assertEquals("hello beautiful world", result.getStdOut());
     }
 
     @Test
     void fullPipelineEchoQuotedString() {
         var node = parser.parse("echo \"hello world\"");
-        var command = resolver.resolve(node);
+        var command = resolver.resolve(context, node);
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello world", result.getResult());
+        assertEquals("hello world", result.getStdOut());
     }
 
     @Test
     void fullPipelineEchoWithRedirection() {
         var node = parser.parse("echo hello > out.txt");
-        var command = resolver.resolve(node);
+        var command = resolver.resolve(context, node);
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello", result.getResult());
+        assertEquals("hello", result.getStdOut());
         assertTrue(result.hasRedirection());
         assertEquals("out.txt", result.getRedirections().getFirst().target());
     }
@@ -68,11 +68,11 @@ class IntegrationTest {
     @Test
     void fullPipelineEchoNoArgs() {
         var node = parser.parse("echo");
-        var command = resolver.resolve(node);
+        var command = resolver.resolve(context, node);
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertNull(result.getResult());
+        assertNull(result.getStdOut());
         assertFalse(result.shouldPrint());
         assertTrue(result.isSuccess());
     }
@@ -80,7 +80,7 @@ class IntegrationTest {
     @Test
     void unknownCommandResolvesToNull() {
         var node = parser.parse("ls -la");
-        var command = resolver.resolve(node);
+        var command = resolver.resolve(context, node);
         assertNull(command);
     }
 }

@@ -7,6 +7,7 @@ public enum CommandNames {
     PWD("pwd"),
     CD("cd"),
     TYPE("type"),
+    QUACK("quack"),
     INVALID_CMD("invalid_cmd");
 
     private final String name;

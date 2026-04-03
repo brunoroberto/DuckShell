@@ -52,20 +52,20 @@ class DuckParserTest {
 
     @Test
     void parseStdoutRedirect() {
-        var node = parser.parse("echo hello > output.txt");
+        var node = parser.parse("echo hello > stdout.txt");
         assertEquals("echo", node.command());
         assertEquals(1, node.arguments().size());
         assertEquals(1, node.redirections().size());
         assertEquals(RedirectionType.STDOUT_OVERWRITE, node.redirections().get(0).type());
-        assertEquals("output.txt", node.redirections().get(0).target());
+        assertEquals("stdout.txt", node.redirections().get(0).target());
     }
 
     @Test
     void parseAppendRedirect() {
-        var node = parser.parse("echo hello >> output.txt");
+        var node = parser.parse("echo hello >> stdout.txt");
         assertEquals(1, node.redirections().size());
         assertEquals(RedirectionType.STDOUT_APPEND, node.redirections().get(0).type());
-        assertEquals("output.txt", node.redirections().get(0).target());
+        assertEquals("stdout.txt", node.redirections().get(0).target());
     }
 
     @Test

@@ -19,7 +19,7 @@ class PwdCmdTest {
     void pwdReturnsCurrentWorkingDirectory() {
         var cmd = new PwdCmd(new CommandNode("pwd", List.of(), List.of()));
         var result = cmd.execute(context);
-        assertEquals(System.getProperty("user.dir"), result.getResult());
+        assertEquals(System.getProperty("user.dir"), result.getStdOut());
         assertTrue(result.shouldPrint());
         assertTrue(result.isSuccess());
     }

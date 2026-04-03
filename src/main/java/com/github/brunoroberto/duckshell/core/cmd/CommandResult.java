@@ -5,14 +5,14 @@ import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionNode;
 import java.util.Collections;
 import java.util.List;
 
-public record CommandResult(String output, boolean shouldPrint, boolean success, List<RedirectionNode> redirections) implements Result{
+public record CommandResult(String stdout, String stderr, boolean shouldPrint, boolean success, List<RedirectionNode> redirections) implements Result {
 
-    public CommandResult(String output, List<RedirectionNode> redirections) {
-        this(output, true, true, redirections);
+    public CommandResult(String stdout, List<RedirectionNode> redirections) {
+        this(stdout, "", true, true, redirections);
     }
 
     public CommandResult(boolean success) {
-        this("", false, success, Collections.emptyList());
+        this("", "", false, success, Collections.emptyList());
     }
 
     @Override
@@ -21,8 +21,13 @@ public record CommandResult(String output, boolean shouldPrint, boolean success,
     }
 
     @Override
-    public String getResult() {
-        return output;
+    public String getStdOut() {
+        return stdout;
+    }
+
+    @Override
+    public String getStdErr() {
+        return stderr;
     }
 
     @Override

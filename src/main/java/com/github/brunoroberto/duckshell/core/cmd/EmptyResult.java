@@ -17,7 +17,12 @@ public record EmptyResult() implements Result {
     }
 
     @Override
-    public String getResult() {
+    public String getStdOut() {
+        return null;
+    }
+
+    @Override
+    public String getStdErr() {
         return null;
     }
 

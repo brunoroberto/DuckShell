@@ -10,7 +10,9 @@ public interface Result {
 
     boolean shouldPrint();
 
-    String getResult();
+    String getStdOut();
+
+    String getStdErr();
 
     boolean hasRedirection();
 

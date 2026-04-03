@@ -1,19 +1,32 @@
 package com.github.brunoroberto.duckshell.core.cmd;
 
+import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.builtin.*;
+import com.github.brunoroberto.duckshell.core.cmd.ext.ExternalCommand;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
+
+import static com.github.brunoroberto.duckshell.core.cmd.CommandNames.*;
 
 public class CommandResolver {
 
-    public Command resolve(CommandNode commandNode) {
-        var cmdName = CommandNames.of(commandNode.command());
+    public Command resolve(Context context, CommandNode commandNode) {
+        var cmdName = of(commandNode.command());
         return switch (cmdName) {
-            case CommandNames.EXIT -> new ExitCmd();
-            case CommandNames.ECHO -> new EchoCmd(commandNode);
-            case CommandNames.PWD -> new PwdCmd(commandNode);
-            case CommandNames.CD -> new CdCmd(commandNode);
-            case CommandNames.TYPE ->  new TypeCmd(commandNode);
-            default -> null;
+            case EXIT -> new ExitCmd();
+            case ECHO -> new EchoCmd(commandNode);
+            case PWD -> new PwdCmd(commandNode);
+            case CD -> new CdCmd(commandNode);
+            case TYPE ->  new TypeCmd(commandNode);
+            case QUACK -> new QuackCmd(commandNode);
+            case INVALID_CMD -> buildExternalOrInvalidCommand(context, commandNode);
         };
+    }
+
+    private Command buildExternalOrInvalidCommand(Context context, CommandNode commandNode) {
+        var externalCommandPath = context.getOsPath().findExecutableCommandPath(commandNode.command());
+        if (externalCommandPath != null) {
+            return new ExternalCommand(commandNode, externalCommandPath);
+        }
+        return new InvalidCmd(commandNode);
     }
 }

@@ -8,6 +8,6 @@ public class ExternalCommandExecutor implements CommandExecutor<ExternalCommand>
 
     @Override
     public Result execute(Context context, ExternalCommand command) {
-        return null;
+        return command.execute(context);
     }
 }

@@ -21,7 +21,7 @@ class CdCmdTest {
     void cdToExistingDirectory(@TempDir Path tempDir) {
         var cmd = new CdCmd(new CommandNode("cd", List.of(tempDir.toString()), List.of()));
         var result = cmd.execute(context);
-        assertEquals("", result.output());
+        assertEquals("", result.stdout());
         assertFalse(result.shouldPrint());
         assertTrue(result.success());
         assertEquals(tempDir.toString(), context.getCurrentWorkingDirectoryAsString());
@@ -31,7 +31,7 @@ class CdCmdTest {
     void cdToNonExistentDirectoryReturnsError() {
         var cmd = new CdCmd(new CommandNode("cd", List.of("/nonexistent/path/xyz"), List.of()));
         var result = cmd.execute(context);
-        assertTrue(result.output().contains("does not exist"));
+        assertTrue(result.stdout().contains("does not exist"));
         assertTrue(result.shouldPrint());
         assertFalse(result.success());
     }

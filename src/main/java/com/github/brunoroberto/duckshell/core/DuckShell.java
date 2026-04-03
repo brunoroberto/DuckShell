@@ -7,7 +7,7 @@ import com.github.brunoroberto.duckshell.core.parser.ShellParser;
 
 public class DuckShell implements Shell {
 
-    private static final String PROMPT_SYMBOL = "%s |quack > ";
+    private static final String PROMPT_SYMBOL = "%s | quack > ";
 
     private final Context context;
     private final ShellParser shellParser;
@@ -26,10 +26,10 @@ public class DuckShell implements Shell {
         this.running = true;
         while (running) {
             var rawInput = prompt();
-            var command = commandResolver.resolve(this.shellParser.parse(rawInput));
+            var command = commandResolver.resolve(this.context, this.shellParser.parse(rawInput));
             var executor = CommandExecutorFactory.create(command);
-            var result = executor.execute(context, command);
-            printOutput(result);
+            var result = executor.execute(this.context, command);
+            printResult(result);
         }
     }
 
@@ -38,9 +38,13 @@ public class DuckShell implements Shell {
         return IO.readln(prompt);
     }
 
-    private void printOutput(Result result) {
+    private void printResult(Result result) {
         if (result.shouldPrint()) {
-            IO.println(result.getResult());
+            if (result.isSuccess()) {
+                IO.println(result.getStdOut());
+            } else {
+                IO.println(result.getStdErr());
+            }
         }
     }
 }

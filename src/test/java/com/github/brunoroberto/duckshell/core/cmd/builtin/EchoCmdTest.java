@@ -19,7 +19,7 @@ class EchoCmdTest {
     void echoSingleArgument() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), List.of()));
         var result = cmd.execute(context);
-        assertEquals("hello", result.getResult());
+        assertEquals("hello", result.getStdOut());
         assertTrue(result.shouldPrint());
         assertTrue(result.isSuccess());
     }
@@ -28,7 +28,7 @@ class EchoCmdTest {
     void echoMultipleArgumentsJoinedWithSpaces() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello", "world"), List.of()));
         var result = cmd.execute(context);
-        assertEquals("hello world", result.getResult());
+        assertEquals("hello world", result.getStdOut());
         assertTrue(result.shouldPrint());
     }
 
@@ -36,7 +36,7 @@ class EchoCmdTest {
     void echoNoArgumentsReturnsNullOutput() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of(), List.of()));
         var result = cmd.execute(context);
-        assertNull(result.getResult());
+        assertNull(result.getStdOut());
         assertFalse(result.shouldPrint());
         assertTrue(result.isSuccess());
     }
