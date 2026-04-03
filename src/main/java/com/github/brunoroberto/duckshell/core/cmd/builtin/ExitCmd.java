@@ -1,13 +1,14 @@
 package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
 import com.github.brunoroberto.duckshell.core.Context;
-import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
+import com.github.brunoroberto.duckshell.core.cmd.EmptyResult;
+import com.github.brunoroberto.duckshell.core.cmd.Result;
 
 public class ExitCmd implements ShellCommand {
 
     @Override
-    public CommandResult execute(Context context) {
+    public Result execute(Context context) {
         System.exit(0);
-        return new CommandResult(null, false, true, null);
+        return new EmptyResult();
     }
 }

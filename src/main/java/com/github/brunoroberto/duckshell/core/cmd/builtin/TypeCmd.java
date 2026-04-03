@@ -3,6 +3,8 @@ package com.github.brunoroberto.duckshell.core.cmd.builtin;
 import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.CommandNames;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
+import com.github.brunoroberto.duckshell.core.cmd.EmptyResult;
+import com.github.brunoroberto.duckshell.core.cmd.Result;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
 import java.nio.file.Path;
@@ -22,9 +24,9 @@ public class TypeCmd implements ShellCommand{
     }
 
     @Override
-    public CommandResult execute(Context context) {
+    public Result execute(Context context) {
         if (hasNoArguments()) {
-            return new CommandResult(true);
+            return new EmptyResult();
         }
 
         String targetCmd = this.commandNode.arguments().getFirst();

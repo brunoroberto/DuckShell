@@ -2,12 +2,12 @@ package com.github.brunoroberto.duckshell.core.cmd.ext;
 
 import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.CommandExecutor;
-import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
+import com.github.brunoroberto.duckshell.core.cmd.Result;
 
 public class ExternalCommandExecutor implements CommandExecutor<ExternalCommand> {
 
     @Override
-    public CommandResult execute(Context context, ExternalCommand command) {
+    public Result execute(Context context, ExternalCommand command) {
         return null;
     }
 }

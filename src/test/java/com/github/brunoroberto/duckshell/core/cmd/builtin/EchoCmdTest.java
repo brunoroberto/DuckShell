@@ -19,16 +19,16 @@ class EchoCmdTest {
     void echoSingleArgument() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), List.of()));
         var result = cmd.execute(context);
-        assertEquals("hello", result.output());
+        assertEquals("hello", result.getResult());
         assertTrue(result.shouldPrint());
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
     }
 
     @Test
     void echoMultipleArgumentsJoinedWithSpaces() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello", "world"), List.of()));
         var result = cmd.execute(context);
-        assertEquals("hello world", result.output());
+        assertEquals("hello world", result.getResult());
         assertTrue(result.shouldPrint());
     }
 
@@ -36,9 +36,9 @@ class EchoCmdTest {
     void echoNoArgumentsReturnsNullOutput() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of(), List.of()));
         var result = cmd.execute(context);
-        assertNull(result.output());
+        assertNull(result.getResult());
         assertFalse(result.shouldPrint());
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -46,8 +46,8 @@ class EchoCmdTest {
         var redirections = List.of(new RedirectionNode(RedirectionType.STDOUT_OVERWRITE, "out.txt"));
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), redirections));
         var result = cmd.execute(context);
-        assertEquals(1, result.redirections().size());
-        assertEquals("out.txt", result.redirections().get(0).target());
+        assertTrue(result.hasRedirection());
+        assertEquals("out.txt", result.getRedirections().getFirst().target());
     }
 
     @Test

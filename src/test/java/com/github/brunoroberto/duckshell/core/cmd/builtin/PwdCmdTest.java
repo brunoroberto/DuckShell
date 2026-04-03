@@ -19,9 +19,9 @@ class PwdCmdTest {
     void pwdReturnsCurrentWorkingDirectory() {
         var cmd = new PwdCmd(new CommandNode("pwd", List.of(), List.of()));
         var result = cmd.execute(context);
-        assertEquals(System.getProperty("user.dir"), result.output());
+        assertEquals(System.getProperty("user.dir"), result.getResult());
         assertTrue(result.shouldPrint());
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -29,8 +29,8 @@ class PwdCmdTest {
         var redirections = List.of(new RedirectionNode(RedirectionType.STDOUT_OVERWRITE, "out.txt"));
         var cmd = new PwdCmd(new CommandNode("pwd", List.of(), redirections));
         var result = cmd.execute(context);
-        assertEquals(1, result.redirections().size());
-        assertEquals("out.txt", result.redirections().get(0).target());
+        assertTrue(result.hasRedirection());
+        assertEquals("out.txt", result.getRedirections().getFirst().target());
     }
 
     @Test

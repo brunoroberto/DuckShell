@@ -4,6 +4,6 @@ import com.github.brunoroberto.duckshell.core.Context;
 
 public interface Command {
 
-    CommandResult execute(Context context);
+    Result execute(Context context);
 
 }

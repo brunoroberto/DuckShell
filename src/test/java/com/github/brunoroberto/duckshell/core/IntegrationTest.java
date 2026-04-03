@@ -28,9 +28,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello", result.output());
+        assertEquals("hello", result.getResult());
         assertTrue(result.shouldPrint());
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -40,7 +40,7 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello beautiful world", result.output());
+        assertEquals("hello beautiful world", result.getResult());
     }
 
     @Test
@@ -50,7 +50,7 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello world", result.output());
+        assertEquals("hello world", result.getResult());
     }
 
     @Test
@@ -60,9 +60,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertEquals("hello", result.output());
-        assertEquals(1, result.redirections().size());
-        assertEquals("out.txt", result.redirections().get(0).target());
+        assertEquals("hello", result.getResult());
+        assertTrue(result.hasRedirection());
+        assertEquals("out.txt", result.getRedirections().getFirst().target());
     }
 
     @Test
@@ -72,9 +72,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
-        assertNull(result.output());
+        assertNull(result.getResult());
         assertFalse(result.shouldPrint());
-        assertTrue(result.success());
+        assertTrue(result.isSuccess());
     }
 
     @Test
