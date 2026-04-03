@@ -4,6 +4,8 @@ public enum CommandNames {
 
     ECHO("echo"),
     EXIT("exit"),
+    PWD("pwd"),
+    CD("cd"),
     INVALID_CMD("invalid_cmd");
 
     private final String name;

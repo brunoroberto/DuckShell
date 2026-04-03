@@ -2,6 +2,8 @@ package com.github.brunoroberto.duckshell.core;
 
 import com.github.brunoroberto.duckshell.core.io.ShellOutput;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -18,6 +20,10 @@ public class ShellContext {
         this.currentWorkingDirectory = Paths.get(System.getProperty("user.dir"));
     }
 
+    public ShellOutput getDefaultOutput() {
+        return this.defaultOutput;
+    }
+
     public String getCurrentWorkingDirectoryAsString() {
         return currentWorkingDirectory.toString();
     }
@@ -26,8 +32,11 @@ public class ShellContext {
         return this.currentWorkingDirectory;
     }
 
-    public ShellOutput getDefaultOutput() {
-        return this.defaultOutput;
+    public void updateCurrentWorkingDirectory(String targetDir) throws FileNotFoundException {
+        var newWorkingDir = this.currentWorkingDirectory.resolve(targetDir).normalize();
+        if (!Files.exists(newWorkingDir)) {
+            throw new FileNotFoundException(String.format("Target directory '%s' does not exist", newWorkingDir));
+        }
+        this.currentWorkingDirectory = newWorkingDir;
     }
-
 }
