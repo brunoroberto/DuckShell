@@ -8,16 +8,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-public class ShellContext {
+public class Context {
 
     private final ShellOutput defaultOutput;
+    private final OSPath osPath;
 
     private Path currentWorkingDirectory;
 
-    public ShellContext(ShellOutput defaultOutput) {
+    public Context(ShellOutput defaultOutput,  OSPath osPath) {
         Objects.requireNonNull(defaultOutput, "defaultOutput must not be null");
         this.defaultOutput = defaultOutput;
         this.currentWorkingDirectory = Paths.get(System.getProperty("user.dir"));
+        this.osPath = osPath;
+    }
+
+    public OSPath getOsPath() {
+        return osPath;
     }
 
     public ShellOutput getDefaultOutput() {

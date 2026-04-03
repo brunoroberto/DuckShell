@@ -9,14 +9,14 @@ public class DuckShell implements Shell {
 
     private static final String PROMPT_SYMBOL = "%s |quack > ";
 
-    private final ShellContext shellContext;
+    private final Context context;
     private final ShellParser shellParser;
     private final CommandResolver commandResolver;
 
     private boolean running;
 
-    public DuckShell(ShellContext shellContext, ShellParser shellParser, CommandResolver commandResolver) {
-        this.shellContext = shellContext;
+    public DuckShell(Context context, ShellParser shellParser, CommandResolver commandResolver) {
+        this.context = context;
         this.shellParser = shellParser;
         this.commandResolver = commandResolver;
     }
@@ -28,13 +28,13 @@ public class DuckShell implements Shell {
             var rawInput = prompt();
             var command = commandResolver.resolve(this.shellParser.parse(rawInput));
             var executor = CommandExecutorFactory.create(command);
-            var result = executor.execute(shellContext, command);
+            var result = executor.execute(context, command);
             printOutput(result);
         }
     }
 
     public String prompt() {
-        var prompt = String.format(PROMPT_SYMBOL, this.shellContext.getCurrentWorkingDirectoryAsString());
+        var prompt = String.format(PROMPT_SYMBOL, this.context.getCurrentWorkingDirectoryAsString());
         return IO.readln(prompt);
     }
 

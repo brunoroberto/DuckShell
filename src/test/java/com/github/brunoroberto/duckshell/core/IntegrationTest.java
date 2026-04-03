@@ -12,13 +12,13 @@ class IntegrationTest {
 
     private DuckParser parser;
     private CommandResolver resolver;
-    private ShellContext context;
+    private Context context;
 
     @BeforeEach
     void setUp() {
         parser = new DuckParser();
         resolver = new CommandResolver();
-        context = new ShellContext(content -> {});
+        context = new Context(content -> {}, new OSPath());
     }
 
     @Test

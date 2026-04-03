@@ -6,6 +6,7 @@ public enum CommandNames {
     EXIT("exit"),
     PWD("pwd"),
     CD("cd"),
+    TYPE("type"),
     INVALID_CMD("invalid_cmd");
 
     private final String name;

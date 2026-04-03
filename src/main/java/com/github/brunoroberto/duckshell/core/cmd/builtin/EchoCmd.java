@@ -1,6 +1,6 @@
 package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
-import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
@@ -15,8 +15,8 @@ public class EchoCmd implements ShellCommand {
     }
 
     @Override
-    public CommandResult execute(ShellContext shellContext) {
-        Objects.requireNonNull(shellContext, "shell context must not be null");
+    public CommandResult execute(Context context) {
+        Objects.requireNonNull(context, "shell context must not be null");
         var params = this.commandNode.arguments();
         if (params != null && !params.isEmpty()) {
             var content = String.join(" ", params);

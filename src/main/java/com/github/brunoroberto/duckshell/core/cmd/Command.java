@@ -1,9 +1,9 @@
 package com.github.brunoroberto.duckshell.core.cmd;
 
-import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.Context;
 
 public interface Command {
 
-    CommandResult execute(ShellContext shellContext);
+    CommandResult execute(Context context);
 
 }

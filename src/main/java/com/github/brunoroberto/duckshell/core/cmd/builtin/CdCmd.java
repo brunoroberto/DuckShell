@@ -1,6 +1,6 @@
 package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
-import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
@@ -18,11 +18,11 @@ public class CdCmd implements ShellCommand{
     }
 
     @Override
-    public CommandResult execute(ShellContext shellContext) {
-        Objects.requireNonNull(shellContext, "shellContext must not be null");
+    public CommandResult execute(Context context) {
+        Objects.requireNonNull(context, "shellContext must not be null");
         var targetDir = getTargetDir(this.commandNode.arguments());
         try {
-            shellContext.updateCurrentWorkingDirectory(targetDir);
+            context.updateCurrentWorkingDirectory(targetDir);
         } catch (FileNotFoundException e) {
             return new CommandResult(e.getMessage(), true, false, commandNode.redirections());
         }

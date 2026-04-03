@@ -4,17 +4,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShellContextTest {
+class ContextTest {
 
     @Test
     void workingDirectoryDefaultsToUserDir() {
-        var context = new ShellContext(content -> {});
+        var context = new Context(content -> {}, new OSPath());
         assertEquals(System.getProperty("user.dir"), context.getCurrentWorkingDirectoryAsString());
     }
 
     @Test
     void getCurrentWorkingDirectoryReturnsPath() {
-        var context = new ShellContext(content -> {});
+        var context = new Context(content -> {}, new OSPath());
         assertNotNull(context.getCurrentWorkingDirectory());
         assertEquals(context.getCurrentWorkingDirectoryAsString(),
                 context.getCurrentWorkingDirectory().toString());
@@ -22,12 +22,12 @@ class ShellContextTest {
 
     @Test
     void defaultOutputIsStored() {
-        var context = new ShellContext(content -> {});
+        var context = new Context(content -> {}, new OSPath());
         assertNotNull(context.getDefaultOutput());
     }
 
     @Test
     void nullOutputThrows() {
-        assertThrows(NullPointerException.class, () -> new ShellContext(null));
+        assertThrows(NullPointerException.class, () -> new Context(null, null));
     }
 }

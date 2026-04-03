@@ -1,6 +1,6 @@
 package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
-import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
@@ -15,8 +15,8 @@ public class PwdCmd implements ShellCommand {
     }
 
     @Override
-    public CommandResult execute(ShellContext shellContext) {
-        Objects.requireNonNull(shellContext, "shellContext must not be null");
-        return new CommandResult(shellContext.getCurrentWorkingDirectoryAsString(), true, true, this.commandNode.redirections());
+    public CommandResult execute(Context context) {
+        Objects.requireNonNull(context, "shellContext must not be null");
+        return new CommandResult(context.getCurrentWorkingDirectoryAsString(), true, true, this.commandNode.redirections());
     }
 }

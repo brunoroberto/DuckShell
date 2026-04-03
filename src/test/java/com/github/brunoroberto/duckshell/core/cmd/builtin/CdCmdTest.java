@@ -1,6 +1,7 @@
 package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
-import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.Context;
+import com.github.brunoroberto.duckshell.core.OSPath;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionNode;
 import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionType;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CdCmdTest {
 
-    private final ShellContext context = new ShellContext(content -> {});
+    private final Context context = new Context(content -> {}, new OSPath());
 
     @Test
     void cdToExistingDirectory(@TempDir Path tempDir) {
