@@ -1,4 +1,4 @@
-package com.github.brunoroberto.duckshell.core.commands;
+package com.github.brunoroberto.duckshell.core.cmd;
 
 public enum CommandNames {
 

@@ -1,5 +1,7 @@
-package com.github.brunoroberto.duckshell.core.commands;
+package com.github.brunoroberto.duckshell.core.cmd;
 
+import com.github.brunoroberto.duckshell.core.cmd.builtin.EchoCmd;
+import com.github.brunoroberto.duckshell.core.cmd.builtin.ExitCmd;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
 public class CommandResolver {

@@ -1,8 +1,8 @@
 package com.github.brunoroberto.duckshell.core;
 
-import com.github.brunoroberto.duckshell.core.commands.CommandExecutorFactory;
-import com.github.brunoroberto.duckshell.core.commands.CommandResolver;
-import com.github.brunoroberto.duckshell.core.commands.CommandResult;
+import com.github.brunoroberto.duckshell.core.cmd.CommandExecutorFactory;
+import com.github.brunoroberto.duckshell.core.cmd.CommandResolver;
+import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
 import com.github.brunoroberto.duckshell.core.parser.ShellParser;
 
 public class DuckShell implements Shell {

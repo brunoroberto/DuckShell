@@ -1,6 +1,7 @@
-package com.github.brunoroberto.duckshell.core.commands;
+package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
 import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
 import java.util.Objects;

@@ -1,8 +1,9 @@
-package com.github.brunoroberto.duckshell.core.commands;
+package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
 import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
 
-public class ExitCmd implements ShellCommand{
+public class ExitCmd implements ShellCommand {
 
     @Override
     public CommandResult execute(ShellContext shellContext) {

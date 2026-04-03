@@ -1,4 +1,4 @@
-package com.github.brunoroberto.duckshell.core.commands;
+package com.github.brunoroberto.duckshell.core.cmd;
 
 import com.github.brunoroberto.duckshell.core.ShellContext;
 

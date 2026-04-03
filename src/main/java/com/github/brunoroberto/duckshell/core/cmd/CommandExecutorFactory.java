@@ -1,4 +1,9 @@
-package com.github.brunoroberto.duckshell.core.commands;
+package com.github.brunoroberto.duckshell.core.cmd;
+
+import com.github.brunoroberto.duckshell.core.cmd.builtin.ShellCommand;
+import com.github.brunoroberto.duckshell.core.cmd.ext.ExternalCommand;
+import com.github.brunoroberto.duckshell.core.cmd.ext.ExternalCommandExecutor;
+import com.github.brunoroberto.duckshell.core.cmd.builtin.ShellCommandExecutor;
 
 public class CommandExecutorFactory {
 
