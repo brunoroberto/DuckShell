@@ -1,0 +1,63 @@
+package com.github.brunoroberto.duckshell.core.cmd.builtin;
+
+import com.github.brunoroberto.duckshell.core.ShellContext;
+import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
+import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
+import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionNode;
+import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionType;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class EchoCmdTest {
+
+    private final ShellContext context = new ShellContext(content -> {});
+
+    @Test
+    void echoSingleArgument() {
+        var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), List.of()));
+        var result = cmd.execute(context);
+        assertEquals("hello", result.output());
+        assertTrue(result.shouldPrint());
+        assertTrue(result.success());
+    }
+
+    @Test
+    void echoMultipleArgumentsJoinedWithSpaces() {
+        var cmd = new EchoCmd(new CommandNode("echo", List.of("hello", "world"), List.of()));
+        var result = cmd.execute(context);
+        assertEquals("hello world", result.output());
+        assertTrue(result.shouldPrint());
+    }
+
+    @Test
+    void echoNoArgumentsReturnsNullOutput() {
+        var cmd = new EchoCmd(new CommandNode("echo", List.of(), List.of()));
+        var result = cmd.execute(context);
+        assertNull(result.output());
+        assertFalse(result.shouldPrint());
+        assertTrue(result.success());
+    }
+
+    @Test
+    void echoPreservesRedirections() {
+        var redirections = List.of(new RedirectionNode(RedirectionType.STDOUT_OVERWRITE, "out.txt"));
+        var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), redirections));
+        var result = cmd.execute(context);
+        assertEquals(1, result.redirections().size());
+        assertEquals("out.txt", result.redirections().get(0).target());
+    }
+
+    @Test
+    void echoWithNullContextThrows() {
+        var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), List.of()));
+        assertThrows(NullPointerException.class, () -> cmd.execute(null));
+    }
+
+    @Test
+    void constructorWithNullCommandNodeThrows() {
+        assertThrows(NullPointerException.class, () -> new EchoCmd(null));
+    }
+}
