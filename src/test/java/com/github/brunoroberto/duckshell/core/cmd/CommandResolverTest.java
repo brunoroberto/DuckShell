@@ -2,9 +2,7 @@ package com.github.brunoroberto.duckshell.core.cmd;
 
 import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.OSPath;
-import com.github.brunoroberto.duckshell.core.cmd.builtin.EchoCmd;
-import com.github.brunoroberto.duckshell.core.cmd.builtin.ExitCmd;
-import com.github.brunoroberto.duckshell.core.cmd.builtin.InvalidCmd;
+import com.github.brunoroberto.duckshell.core.cmd.builtin.*;
 import com.github.brunoroberto.duckshell.core.io.ConsoleOutput;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +35,41 @@ class CommandResolverTest {
         var node = new CommandNode("exit", List.of(), List.of());
         var command = resolver.resolve(context, node);
         assertInstanceOf(ExitCmd.class, command);
+    }
+
+    @Test
+    void resolvesPwdCommand() {
+        var node = new CommandNode("pwd", List.of(), List.of());
+        var command = resolver.resolve(context, node);
+        assertInstanceOf(PwdCmd.class, command);
+    }
+
+    @Test
+    void resolvesCdCommand() {
+        var node = new CommandNode("cd", List.of("/tmp"), List.of());
+        var command = resolver.resolve(context, node);
+        assertInstanceOf(CdCmd.class, command);
+    }
+
+    @Test
+    void resolvesTypeCommand() {
+        var node = new CommandNode("type", List.of("echo"), List.of());
+        var command = resolver.resolve(context, node);
+        assertInstanceOf(TypeCmd.class, command);
+    }
+
+    @Test
+    void resolvesQuackCommand() {
+        var node = new CommandNode("quack", List.of(), List.of());
+        var command = resolver.resolve(context, node);
+        assertInstanceOf(QuackCmd.class, command);
+    }
+
+    @Test
+    void resolvesClearCommand() {
+        var node = new CommandNode("clear", List.of(), List.of());
+        var command = resolver.resolve(context, node);
+        assertInstanceOf(ClearCmd.class, command);
     }
 
     @Test

@@ -32,13 +32,13 @@ Raw Input
 [Parser] ----> CommandNode         (AST: command name, arguments, redirections)
   |
   v
-[Resolver] --> Command             (maps name to a concrete command: EchoCmd, ExitCmd, ...)
+[Resolver] --> Command             (maps name to a concrete command: EchoCmd, CdCmd, ...)
   |
   v
-[Executor] --> CommandResult       (runs the command, produces output)
+[Executor] --> Result              (runs the command, produces output)
   |
   v
-Output
+[Output] ----> Console / File      (routes output based on redirections)
 ```
 
 ### Lexer
@@ -48,7 +48,7 @@ Converts raw input into a stream of typed tokens. Handles:
 - Unquoted words (`hello`)
 - Double-quoted strings with escape support (`"hello \"world\""`)
 - Single-quoted strings taken literally (`'no\nescapes'`)
-- Redirection operators (`>`, `>>`, `1>`, `2>`)
+- Redirection operators (`>`, `>>`, `1>`, `2>`, `2>>`)
 
 ### Parser
 
@@ -58,10 +58,17 @@ Consumes the token stream and produces a `CommandNode` — a record containing t
 
 `CommandResolver` maps a command name to a `Command` instance. Commands are split into two families:
 
-- **Built-in commands** (`ShellCommand`) — handled directly by the shell (e.g. `echo`, `exit`)
-- **External commands** (`ExternalCommand`) — delegated to the OS (not yet implemented)
+- **Built-in commands** (`ShellCommand`) — handled directly by the shell (e.g. `echo`, `cd`, `pwd`)
+- **External commands** (`ExternalCommand`) — delegated to the OS via `ProcessBuilder`, with concurrent stdout/stderr capture
 
 `CommandExecutorFactory` selects the right executor based on command type, keeping the REPL loop decoupled from execution details.
+
+### Output
+
+`ResultOutput` routes command results based on redirections:
+
+- **Console** — default output via `ConsoleOutput`
+- **File** — when redirections are present, `FileOutput` writes to files (supports overwrite and append modes)
 
 ## Built-in Commands
 
@@ -69,6 +76,11 @@ Consumes the token stream and produces a `CommandNode` — a record containing t
 |---------|-------------|
 | `echo`  | Prints arguments to stdout, supports redirections |
 | `exit`  | Exits the shell |
+| `pwd`   | Prints the current working directory |
+| `cd`    | Changes directory (supports absolute, relative, `~`) |
+| `type`  | Identifies whether a command is a shell builtin or external |
+| `quack` | Easter egg — quacks like a duck |
+| `clear` | Clears the terminal screen |
 
 ## Project Structure
 
@@ -78,7 +90,9 @@ src/main/java/com/github/brunoroberto/
   duckshell/core/
     DuckShell.java                       # REPL loop
     Shell.java                           # Shell interface
-    ShellContext.java                     # Shell state (cwd, output)
+    Context.java                         # Shell state (cwd, output, PATH)
+    OSPath.java                          # Executable lookup via $PATH
+    ErrorCmdResult.java                  # Error result record
     parser/
       Lexer.java                         # Tokenizer
       DuckParser.java                    # Token stream -> AST
@@ -91,7 +105,9 @@ src/main/java/com/github/brunoroberto/
         RedirectionType.java             # Redirection type enum
     cmd/
       Command.java                       # Command interface
-      CommandResult.java                 # Execution result record
+      Result.java                        # Result interface
+      SuccessCmdResult.java              # Success result record
+      EmptyCmdResult.java                # Empty result record
       CommandNames.java                  # Known command name registry
       CommandResolver.java               # Name -> Command mapping
       CommandExecutor.java               # Executor interface
@@ -101,12 +117,20 @@ src/main/java/com/github/brunoroberto/
         ShellCommandExecutor.java        # Built-in executor
         EchoCmd.java                     # echo implementation
         ExitCmd.java                     # exit implementation
+        PwdCmd.java                      # pwd implementation
+        CdCmd.java                       # cd implementation
+        TypeCmd.java                     # type implementation
+        QuackCmd.java                    # quack implementation
+        ClearCmd.java                    # clear implementation
+        InvalidCmd.java                  # Unknown command handler
       ext/
-        ExternalCommand.java             # External command marker
-        ExternalCommandExecutor.java     # External executor (WIP)
+        ExternalCommand.java             # External command wrapper
+        ExternalCommandExecutor.java     # External command executor
     io/
       ShellOutput.java                   # Output interface
       ConsoleOutput.java                 # Console output impl
+      ResultOutput.java                  # Output router (console vs file)
+      FileOutput.java                    # File output for redirections
 ```
 
 ## Building & Running
@@ -128,11 +152,8 @@ Requires **Java 21+** and **Gradle**.
 
 This is a work in progress. Possible next steps:
 
-- External command execution (running actual OS processes)
 - Pipe operator (`|`) support
 - Logical operators (`&&`, `||`)
-- File redirection I/O (actually writing to files)
-- `cd`, `pwd`, and other built-ins
 - Environment variables
 - Command history
 
