@@ -2,9 +2,9 @@ package com.github.brunoroberto.duckshell.core.cmd.builtin;
 
 import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.OSPath;
+import com.github.brunoroberto.duckshell.core.cmd.EmptyCmdResult;
+import com.github.brunoroberto.duckshell.core.cmd.SuccessCmdResult;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
-import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionNode;
-import com.github.brunoroberto.duckshell.core.parser.tokens.RedirectionType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,35 +19,27 @@ class EchoCmdTest {
     void echoSingleArgument() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), List.of()));
         var result = cmd.execute(context);
+        assertInstanceOf(SuccessCmdResult.class, result);
         assertEquals("hello", result.getStdOut());
-        assertTrue(result.shouldPrint());
-        assertTrue(result.isSuccess());
+        assertNull(result.getStdErr());
     }
 
     @Test
     void echoMultipleArgumentsJoinedWithSpaces() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of("hello", "world"), List.of()));
         var result = cmd.execute(context);
+        assertInstanceOf(SuccessCmdResult.class, result);
         assertEquals("hello world", result.getStdOut());
-        assertTrue(result.shouldPrint());
+        assertNull(result.getStdErr());
     }
 
     @Test
     void echoNoArgumentsReturnsNullOutput() {
         var cmd = new EchoCmd(new CommandNode("echo", List.of(), List.of()));
         var result = cmd.execute(context);
+        assertInstanceOf(EmptyCmdResult.class, result);
         assertNull(result.getStdOut());
-        assertFalse(result.shouldPrint());
-        assertTrue(result.isSuccess());
-    }
-
-    @Test
-    void echoPreservesRedirections() {
-        var redirections = List.of(new RedirectionNode(RedirectionType.STDOUT_OVERWRITE, "out.txt"));
-        var cmd = new EchoCmd(new CommandNode("echo", List.of("hello"), redirections));
-        var result = cmd.execute(context);
-        assertTrue(result.hasRedirection());
-        assertEquals("out.txt", result.getRedirections().getFirst().target());
+        assertNull(result.getStdErr());
     }
 
     @Test

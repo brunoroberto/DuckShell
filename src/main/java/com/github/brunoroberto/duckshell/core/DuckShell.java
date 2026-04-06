@@ -2,7 +2,8 @@ package com.github.brunoroberto.duckshell.core;
 
 import com.github.brunoroberto.duckshell.core.cmd.CommandExecutorFactory;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResolver;
-import com.github.brunoroberto.duckshell.core.cmd.Result;
+import com.github.brunoroberto.duckshell.core.io.ConsoleOutput;
+import com.github.brunoroberto.duckshell.core.io.ResultOutput;
 import com.github.brunoroberto.duckshell.core.parser.ShellParser;
 
 public class DuckShell implements Shell {
@@ -26,25 +27,18 @@ public class DuckShell implements Shell {
         this.running = true;
         while (running) {
             var rawInput = prompt();
-            var command = commandResolver.resolve(this.context, this.shellParser.parse(rawInput));
+            var commandNode = shellParser.parse(rawInput);
+            var command = commandResolver.resolve(this.context, commandNode);
             var executor = CommandExecutorFactory.create(command);
             var result = executor.execute(this.context, command);
-            printResult(result);
+            var resultOutput = new ResultOutput(this.context, new ConsoleOutput())
+                    .withRedirections(commandNode.redirections());
+            resultOutput.write(result);
         }
     }
 
     public String prompt() {
         var prompt = String.format(PROMPT_SYMBOL, this.context.getCurrentWorkingDirectoryAsString());
         return IO.readln(prompt);
-    }
-
-    private void printResult(Result result) {
-        if (result.shouldPrint()) {
-            if (result.isSuccess()) {
-                IO.println(result.getStdOut());
-            } else {
-                IO.println(result.getStdErr());
-            }
-        }
     }
 }

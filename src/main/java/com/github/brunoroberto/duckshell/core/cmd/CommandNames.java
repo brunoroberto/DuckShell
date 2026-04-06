@@ -8,6 +8,7 @@ public enum CommandNames {
     CD("cd"),
     TYPE("type"),
     QUACK("quack"),
+    CLEAR("clear"),
     INVALID_CMD("invalid_cmd");
 
     private final String name;
@@ -27,5 +28,9 @@ public enum CommandNames {
             }
         }
         return INVALID_CMD;
+    }
+
+    public boolean isBuiltIn() {
+        return this != INVALID_CMD;
     }
 }

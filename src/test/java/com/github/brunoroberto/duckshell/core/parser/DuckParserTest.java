@@ -76,14 +76,6 @@ class DuckParserTest {
     }
 
     @Test
-    void parseStderrRedirectDoesNotAdvancePastToken() {
-        // NOTE: The parser has a bug — the STDERR_OUT branch doesn't advance()
-        // past the 2> token before consuming the target, so this currently throws.
-        assertThrows(IllegalArgumentException.class, () ->
-                parser.parse("echo hello > out.txt 2> err.txt"));
-    }
-
-    @Test
     void emptyReturnsEmptyCommand() {
         var emptyCommandNode = parser.parse("");
         assertNotNull(emptyCommandNode);

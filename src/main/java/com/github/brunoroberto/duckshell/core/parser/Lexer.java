@@ -99,13 +99,25 @@ public class Lexer {
         char currentChar = getCurrentChar();
         if (currentChar == '1' && lookAhead() == '>') {
             advance();
+            if (lookAhead() == '>') {
+                advance();
+                advance();
+                return new Token(TokenType.REDIRECT_APPEND, "1>>", start);
+            }
             advance();
-            return new Token(TokenType.REDIRECT_OUT, "1>", start);
+            var value = this.input.substring(start, position);
+            return new Token(TokenType.REDIRECT_OUT, value, start);
         }
         if (currentChar == '2' && lookAhead() == '>') {
             advance();
+            if (lookAhead() == '>') {
+                advance();
+                advance();
+                return new Token(TokenType.STDERR_OUT_APPEND, "2>>", start);
+            }
             advance();
-            return new Token(TokenType.STDERR_OUT, "2>", start);
+            var value = this.input.substring(start, position);
+            return new Token(TokenType.STDERR_OUT, value, start);
         }
         if (currentChar == '>') {
             if (lookAhead() == '>') {

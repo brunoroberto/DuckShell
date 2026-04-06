@@ -2,9 +2,8 @@ package com.github.brunoroberto.duckshell.core.cmd.ext;
 
 import com.github.brunoroberto.duckshell.core.Context;
 import com.github.brunoroberto.duckshell.core.cmd.Command;
-import com.github.brunoroberto.duckshell.core.cmd.CommandResult;
-import com.github.brunoroberto.duckshell.core.cmd.EmptyResult;
 import com.github.brunoroberto.duckshell.core.cmd.Result;
+import com.github.brunoroberto.duckshell.core.cmd.SuccessCmdResult;
 import com.github.brunoroberto.duckshell.core.parser.tokens.CommandNode;
 
 import java.io.BufferedReader;
@@ -16,7 +15,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ExternalCommand implements Command {
 
@@ -48,12 +50,10 @@ public class ExternalCommand implements Command {
 
             process.getOutputStream().close();
 
-            int exitCode = process.waitFor();
-
             String stdout = stdoutFuture.get();
             String stderr = stderrFuture.get();
 
-            return  new CommandResult(stdout, stderr, true, exitCode == 0, commandNode.redirections());
+            return new SuccessCmdResult(stdout, stderr);
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to start process", e);

@@ -2,6 +2,8 @@ package com.github.brunoroberto.duckshell.core;
 
 import com.github.brunoroberto.duckshell.core.cmd.CommandExecutorFactory;
 import com.github.brunoroberto.duckshell.core.cmd.CommandResolver;
+import com.github.brunoroberto.duckshell.core.cmd.EmptyCmdResult;
+import com.github.brunoroberto.duckshell.core.cmd.SuccessCmdResult;
 import com.github.brunoroberto.duckshell.core.cmd.builtin.InvalidCmd;
 import com.github.brunoroberto.duckshell.core.parser.DuckParser;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +31,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
+        assertInstanceOf(SuccessCmdResult.class, result);
         assertEquals("hello", result.getStdOut());
-        assertTrue(result.shouldPrint());
-        assertTrue(result.isSuccess());
+        assertNull(result.getStdErr());
     }
 
     @Test
@@ -41,7 +43,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
+        assertInstanceOf(SuccessCmdResult.class, result);
         assertEquals("hello beautiful world", result.getStdOut());
+        assertNull(result.getStdErr());
     }
 
     @Test
@@ -51,7 +55,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
+        assertInstanceOf(SuccessCmdResult.class, result);
         assertEquals("hello world", result.getStdOut());
+        assertNull(result.getStdErr());
     }
 
     @Test
@@ -61,9 +67,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
+        assertInstanceOf(SuccessCmdResult.class, result);
         assertEquals("hello", result.getStdOut());
-        assertTrue(result.hasRedirection());
-        assertEquals("out.txt", result.getRedirections().getFirst().target());
+        assertNull(result.getStdErr());
     }
 
     @Test
@@ -73,9 +79,9 @@ class IntegrationTest {
         var executor = CommandExecutorFactory.create(command);
         var result = executor.execute(context, command);
 
+        assertInstanceOf(EmptyCmdResult.class, result);
         assertNull(result.getStdOut());
-        assertFalse(result.shouldPrint());
-        assertTrue(result.isSuccess());
+        assertNull(result.getStdErr());
     }
 
     @Test

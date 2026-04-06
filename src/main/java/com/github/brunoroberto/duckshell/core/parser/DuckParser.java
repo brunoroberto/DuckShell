@@ -73,8 +73,13 @@ public class DuckParser implements ShellParser {
                 var targetToken = consumeAny(List.of(TokenType.WORD, TokenType.STRING), "Expected target file");
                 redirections.add(new RedirectionNode(RedirectionType.STDOUT_APPEND, targetToken.value()));
             } else if (check(TokenType.STDERR_OUT)) {
+                advance();
                 var targetToken = consumeAny(List.of(TokenType.WORD, TokenType.STRING), "Expected target file");
                 redirections.add(new RedirectionNode(RedirectionType.STDERR, targetToken.value()));
+            } else if (check(TokenType.STDERR_OUT_APPEND)) {
+                advance();
+                var targetToken = consumeAny(List.of(TokenType.WORD, TokenType.STRING), "Expected target file");
+                redirections.add(new RedirectionNode(RedirectionType.STDERR_APPEND, targetToken.value()));
             } else {
                 throw createError(String.format("Unexpected token '%s'", commandToken.value()));
             }

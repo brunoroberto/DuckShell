@@ -14,10 +14,11 @@ public class CommandResolver {
         return switch (cmdName) {
             case EXIT -> new ExitCmd();
             case ECHO -> new EchoCmd(commandNode);
-            case PWD -> new PwdCmd(commandNode);
+            case PWD -> new PwdCmd();
             case CD -> new CdCmd(commandNode);
             case TYPE ->  new TypeCmd(commandNode);
-            case QUACK -> new QuackCmd(commandNode);
+            case QUACK -> new QuackCmd();
+            case CLEAR -> new ClearCmd();
             case INVALID_CMD -> buildExternalOrInvalidCommand(context, commandNode);
         };
     }
